@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2021 Raspberry Pi (Trading) Ltd.
+ * Copyright (c) 2023 Raspberry Pi (Trading) Ltd.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,46 +23,31 @@
  *
  */
 
-#ifndef PICOPROBE_H_
-#define PICOPROBE_H_
+#ifndef BOARD_QTPY_H_
+#define BOARD_QTPY_H_
 
-#if false
-#define picoprobe_info(format,args...) printf(format, ## args)
-#else
-#define picoprobe_info(format,...) ((void)0)
+#define PROBE_IO_RAW
+#define PROBE_CDC_UART
+
+// PIO config
+#define PROBE_SM 0
+#define PROBE_PIN_OFFSET 24
+#define PROBE_PIN_SWCLK (PROBE_PIN_OFFSET + 0) // SDA
+#define PROBE_PIN_SWDIO (PROBE_PIN_OFFSET + 1) // SCL
+
+// Target reset config
+#define PROBE_PIN_RESET PICO_DEFAULT_SPI_SCK_PIN
+
+// UART config
+#define PICOPROBE_UART_TX        PICO_DEFAULT_UART_TX_PIN
+#define PICOPROBE_UART_RX        PICO_DEFAULT_UART_RX_PIN
+#define PICOPROBE_UART_INTERFACE uart1
+#define PICOPROBE_UART_BAUDRATE  115200
+
+#ifdef PICO_DEFAULT_UART_RX_PIN
+#define PICOPROBE_USB_CONNECTED_LED PICO_DEFAULT_UART_RX_PIN
 #endif
 
-
-#if false
-#define picoprobe_debug(format,args...) printf(format, ## args)
-#else
-#define picoprobe_debug(format,...) ((void)0)
-#endif
-
-#if false
-#define picoprobe_dump(format,args...) printf(format, ## args)
-#else
-#define picoprobe_dump(format,...) ((void)0)
-#endif
-
-// TODO tie this up with PICO_BOARD defines in the main SDK
-
-#ifdef DEBUGPROBE
-#include "board_debugprobe_config.h"
-#elif defined(_BOARDS_ADAFRUIT_QTPY_RP2040_H)
-#include "board_qtpy_config.h"
-#else
-#include "board_pico_config.h"
-#endif
-//#include "board_example_config.h"
-
-
-#define PROTO_DAP_V1 1
-#define PROTO_DAP_V2 2
-
-// Interface config
-#ifndef PICOPROBE_DEBUG_PROTOCOL
-#define PICOPROBE_DEBUG_PROTOCOL PROTO_DAP_V2
-#endif
+#define PROBE_PRODUCT_STRING "Picoprobe QTPY (CMSIS-DAP)"
 
 #endif
